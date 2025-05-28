@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en" class="mdui-theme-auto">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistical Calculator</title>
+    <!-- MDUI CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/mdui@2/mdui.css">
+    <!-- Material Icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <!-- 导入折叠面板组件 -->
+    <script type="module">
+        import 'https://unpkg.com/mdui@2/components/collapse.js';
+        import 'https://unpkg.com/mdui@2/components/collapse-item.js';
+    </script>
+    <style>
+        body {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .result {
+            margin-top: 16px;
+            padding: 16px;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="mdui-prose">
+        <h1>Probability and Statistics Calculator</h1>
+        <h2>Probability Calculator</h2>
+        Under construction.
+        <mdui-divider></mdui-divider>
+        <h2>Critical Values Calculator</h2>
+        <mdui-card-content>            <mdui-collapse accordion> 
+                <!-- Calculate z Critical Value -->
+                <mdui-collapse-item>
+                    <div slot="header" style="display: flex; align-items: center; padding: 12px 0;">
+                        <mdui-icon style="margin-right: 16px;">Z</mdui-icon>
+                        <div>
+                            <div style="font-size: 16px; font-weight: 500;">Calculate z Critical Value</div>
+                            <div style="font-size: 14px; color: rgba(0, 0, 0, 0.6);">Calculate z critical value based on
+                                significance level (standard normal distribution)</div>
+                        </div>
+                    </div>
+                    <div style="padding: 16px;">
+                        <mdui-text-field id="z-crit-alpha" label="Significance Level"></mdui-text-field>
+                        <div id="z-crit-result" class="result" hidden>
+                            <p id="z-crit-left"></p>
+                            <p id="z-crit-right"></p>
+                            <p id="z-crit-two-tail"></p>
+                        </div>
+                        <div style="margin-top: 16px;">
+                            <mdui-button onclick="calculateZCriticalValue()">Calculate</mdui-button>
+                            <mdui-button onclick="clearForm('z-crit-alpha', 'z-crit-result')">Clear</mdui-button>
+                        </div>
+                    </div>
+                </mdui-collapse-item>
+                <!-- Calculate t Critical Value -->
+                <mdui-collapse-item>
+                    <div slot="header" style="display: flex; align-items: center; padding: 12px 0;">
+                        <mdui-icon style="margin-right: 16px;">T</mdui-icon>
+                        <div>
+                            <div style="font-size: 16px; font-weight: 500;">Calculate t Critical Value</div>
+                            <div style="font-size: 14px; color: rgba(0, 0, 0, 0.6);">Calculate t critical value based on
+                                degrees of freedom and significance level</div>
+                        </div>
+                    </div>
+                    <div style="padding: 16px;">
+                        <mdui-text-field id="t-crit-alpha" label="Significance Level"></mdui-text-field>
+                        <mdui-text-field id="t-crit-df" label="Degrees of Freedom"></mdui-text-field>
+                        <div id="t-crit-result" class="result" hidden>
+                            <p id="t-crit-right"></p>
+                            <p id="t-crit-left"></p>
+                        </div>
+                        <div style="margin-top: 16px;">
+                            <mdui-button onclick="calculateTCriticalValue()">Calculate</mdui-button>
+                            <mdui-button
+                                onclick="clearForm('t-crit-alpha', 't-crit-df', 't-crit-result')">Clear</mdui-button>
+                        </div>
+                    </div>
+                </mdui-collapse-item>                <mdui-collapse-item>
+                    <div slot="header" style="display: flex; align-items: center; padding: 12px 0;">
+                        <mdui-icon style="margin-right: 16px;">F</mdui-icon>
+                        <div>
+                            <div style="font-size: 16px; font-weight: 500;">Calculate F Critical Value</div>
+                            <div style="font-size: 14px; color: rgba(0, 0, 0, 0.6);">Calculate F critical value based on
+                                degrees of freedom and significance level</div>
+                        </div>
+                    </div>
+                    <div style="padding: 16px;">
+                        <mdui-text-field id="f-alpha" label="Significance Level"></mdui-text-field>
+                        <mdui-text-field id="f-crit-df1"
+                            label="Degrees of Freedom for Larger Variance Data"></mdui-text-field>
+                        <mdui-text-field id="f-crit-df2"
+                            label="Degrees of Freedom for Smaller Variance Data"></mdui-text-field>
+                        <div id="f-crit-result" class="result" hidden>
+                            <p id="f-critical-value"></p>
+                        </div>
+                        <div style="margin-top: 16px;">
+                            <mdui-button onclick="calculateFCriticalValue()">Calculate</mdui-button>
+                            <mdui-button
+                                onclick="clearForm('f-crit-df1', 'f-crit-df2', 'f-alpha', 'f-crit-result')">Clear</mdui-button>
+                        </div>
+                    </div>
+                </mdui-collapse-item>
+                <!-- Calculate Chi-square Critical Value -->
+                <mdui-collapse-item>
+                    <div slot="header" style="display: flex; align-items: center; padding: 12px 0;">
+                        <mdui-icon style="margin-right: 16px;">χ²</mdui-icon>
+                        <div>
+                            <div style="font-size: 16px; font-weight: 500;">Calculate Chi-square Critical Value</div>
+                            <div style="font-size: 14px; color: rgba(0, 0, 0, 0.6);">Calculate chi-square critical value based on
+                                degrees of freedom and significance level</div>
+                        </div>
+                    </div>
+                    <div style="padding: 16px;">
+                        <mdui-text-field id="chi-square-crit-alpha" label="Significance Level"></mdui-text-field>
+                        <mdui-text-field id="chi-square-crit-df" label="Degrees of Freedom"></mdui-text-field>
+                        <div id="chi-square-crit-result" class="result" hidden>
+                            <p id="chi-square-critical-value"></p>
+                        </div>
+                        <div style="margin-top: 16px;">
+                            <mdui-button onclick="calculateChiSquareCriticalValue()">Calculate</mdui-button>
+                            <mdui-button
+                                onclick="clearForm('chi-square-crit-alpha', 'chi-square-crit-df', 'chi-square-crit-result')">Clear</mdui-button>
+                        </div>
+                    </div>
+                </mdui-collapse-item>
+            </mdui-collapse>
+        </mdui-card-content> <mdui-divider></mdui-divider>
+        <h2>P-value Calculator</h2>        <mdui-card-content>
+            <mdui-collapse accordion>
+                <!-- Calculate p-value from z-statistic -->
+                <mdui-collapse-item>
+                    <div slot="header" style="display: flex; align-items: center; padding: 12px 0;">
+                        <mdui-icon style="margin-right: 16px;">Z</mdui-icon>
+                        <div>
+                            <div style="font-size: 16px; font-weight: 500;">Calculate p-value from z-statistic</div>
+                            <div style="font-size: 14px; color: rgba(0, 0, 0, 0.6);">Calculate p-value based on
+                                z-statistic (standard normal distribution)</div>
+                        </div>
+                    </div>
+                    <div style="padding: 16px;">
+                        <mdui-text-field id="z-value" label="z-statistic value"></mdui-text-field>
+                        <div id="z-stats-result" class="result" hidden>
+                            <p id="z-single-tail-p"></p>
+                            <p id="z-double-tail-p"></p>
+                        </div>
+                        <div style="margin-top: 16px;">
+                            <mdui-button onclick="calculatePValueFromZStats()">Calculate</mdui-button>
+                            <mdui-button onclick="clearForm('z-value', 'z-stats-result')">Clear</mdui-button>
+                        </div>
+                    </div>
+                </mdui-collapse-item>
+                
+                <!-- Calculate p-value from t-statistic --> 
+                <mdui-collapse-item>
+                    <div slot="header" style="display: flex; align-items: center; padding: 12px 0;">
+                        <mdui-icon style="margin-right: 16px;">T</mdui-icon>
+                        <div>
+                            <div style="font-size: 16px; font-weight: 500;">Calculate p-value from t-statistic</div>
+                            <div style="font-size: 14px; color: rgba(0, 0, 0, 0.6);">Calculate p-value based on
+                                t-statistic and degrees of freedom</div>
+                        </div>
+                    </div>
+                    <div style="padding: 16px;">
+                        <mdui-text-field id="t-value" label="t-statistic value"></mdui-text-field>
+                        <mdui-text-field id="t-dof" label="Degrees of freedom"></mdui-text-field>
+                        <div id="t-stats-result" class="result" hidden>
+                            <p id="single-tail-p"></p>
+                            <p id="double-tail-p"></p>
+                        </div>
+                        <div style="margin-top: 16px;">
+                            <mdui-button onclick="calculatePValueFromTStats()">Calculate</mdui-button>
+                            <mdui-button onclick="clearForm('t-value', 't-dof', 't-stats-result')">Clear</mdui-button>
+                        </div>
+                    </div>
+                </mdui-collapse-item> <!-- Calculate p-value from F-statistic -->                <mdui-collapse-item>
+                    <div slot="header" style="display: flex; align-items: center; padding: 12px 0;">
+                        <mdui-icon style="margin-right: 16px;">F</mdui-icon>
+                        <div>
+                            <div style="font-size: 16px; font-weight: 500;">Calculate p-value from F-statistic</div>
+                            <div style="font-size: 14px; color: rgba(0, 0, 0, 0.6);">Calculate p-value based on
+                                F-statistic and degrees of freedom</div>
+                        </div>
+                    </div>
+                    <div style="padding: 16px;">
+                        <mdui-text-field id="f-statistic" label="F-statistic value"></mdui-text-field>
+                        <mdui-text-field id="f-df1" label="Degrees of Freedom for Larger Variance Data"></mdui-text-field>
+                        <mdui-text-field id="f-df2" label="Degrees of Freedom for Smaller Variance Data"></mdui-text-field>
+                        <div id="f-stats-result" class="result" hidden>
+                            <p id="f-p-value"></p>
+                        </div>
+                        <div style="margin-top: 16px;">
+                            <mdui-button onclick="calculatePValueFromFStats()">Calculate</mdui-button>
+                            <mdui-button
+                                onclick="clearForm('f-statistic', 'f-df1', 'f-df2', 'f-stats-result')">Clear</mdui-button>
+                        </div>
+                    </div>
+                </mdui-collapse-item>
+                <!-- Calculate p-value from Chi-square statistic -->
+                <mdui-collapse-item>
+                    <div slot="header" style="display: flex; align-items: center; padding: 12px 0;">
+                        <mdui-icon style="margin-right: 16px;">χ²</mdui-icon>
+                        <div>
+                            <div style="font-size: 16px; font-weight: 500;">Calculate p-value from Chi-square statistic</div>
+                            <div style="font-size: 14px; color: rgba(0, 0, 0, 0.6);">Calculate p-value based on
+                                chi-square statistic and degrees of freedom</div>
+                        </div>
+                    </div>
+                    <div style="padding: 16px;">
+                        <mdui-text-field id="chi-square-value" label="Chi-square value"></mdui-text-field>
+                        <mdui-text-field id="chi-square-df" label="Degrees of Freedom"></mdui-text-field>
+                        <div id="chi-square-stats-result" class="result" hidden>
+                            <p id="chi-square-p-value"></p>
+                        </div>
+                        <div style="margin-top: 16px;">
+                            <mdui-button onclick="calculatePValueFromChiSquareStats()">Calculate</mdui-button>
+                            <mdui-button
+                                onclick="clearForm('chi-square-value', 'chi-square-df', 'chi-square-stats-result')">Clear</mdui-button>
+                        </div>
+                    </div>
+                </mdui-collapse-item>
+
+
+        </mdui-card-content>
+        </mdui-card>
+    </div>    <!-- MDUI JS -->
+    <script src="https://unpkg.com/mdui@2/mdui.global.js"></script>
+    <!-- 引入计算模块 -->
+    <script src="js/util.js"></script>
+    <script src="js/t-stats-calculator.js"></script>
+    <script src="js/f-stats-calculator.js"></script>
+    <script src="js/z-stats-calculator.js"></script>
+    <script src="js/chi-square-stats-calculator.js"></script>
+    <script src="js/f-critical-calculator.js"></script>
+    <script src="js/t-critical-calculator.js"></script>
+    <script src="js/z-critical-calculator.js"></script>
+    <script src="js/chi-square-critical-calculator.js"></script>
+</body>
+
+</html>
