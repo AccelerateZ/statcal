@@ -21,12 +21,15 @@ function calculatePValueFromChiSquareStats() {
         // Use chi-square distribution from jStat library to calculate p-value
         loadJStat().then(() => {
             // Calculate right-tail p-value P(X >= chiSquareValue)
-            const pValue = 1 - jStat.chisquare.cdf(chiSquareValue, df);
+            const pValue = 1 - jStat.chisquare.cdf(chiSquareValue, df);            // Display results with LaTeX formatting
+            const pValueLatex = `
+                <h4>Chi-square p-value:</h4>
+                <p>$$\\chi^2 = ${formatNumberForLatex(chiSquareValue)}$$</p>
+                <p>$$p = P(\\chi^2_{${df}} \\geq ${formatNumberForLatex(chiSquareValue)}) = ${formatNumberForLatex(pValue)}$$</p>
+            `;
             
-            // Display results
-            document.getElementById('chi-square-p-value').textContent = 
-                `Chi-square p-value (χ²=${formatNumber(chiSquareValue, 4)}, df=${df}): ${formatNumber(pValue, 6)}`;
-            document.getElementById('chi-square-stats-result').hidden = false;
+            updateWithLatex('chi-square-p-value', pValueLatex);
+            showResultContainer('chi-square-stats-result');
         });
         
     } catch (error) {

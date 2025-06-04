@@ -21,12 +21,14 @@ function calculateChiSquareCriticalValue() {
         // Use chi-square distribution from jStat library to calculate critical value
         loadJStat().then(() => {
             // Calculate right-tailed critical value - inverse cumulative distribution at (1-alpha)
-            const chiSquareCritical = jStat.chisquare.inv(1 - alpha, df);
+            const chiSquareCritical = jStat.chisquare.inv(1 - alpha, df);            // Display results with LaTeX formatting
+            const chiSquareCriticalLatex = `
+                <h4>Chi-square critical value:</h4>
+                <p>$$\\chi^2_{\\alpha=${formatNumberForLatex(alpha)},\\text{DoF}=${df}} = ${formatNumberForLatex(chiSquareCritical)}$$</p>
+            `;
             
-            // Display results
-            document.getElementById('chi-square-critical-value').textContent = 
-                `Chi-square critical value (α=${alpha}, df=${df}): ${formatNumber(chiSquareCritical, 4)}`;
-            document.getElementById('chi-square-crit-result').hidden = false;
+            updateWithLatex('chi-square-critical-value', chiSquareCriticalLatex);
+            showResultContainer('chi-square-crit-result');
         });
         
     } catch (error) {

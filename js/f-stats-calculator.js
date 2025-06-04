@@ -24,12 +24,15 @@ function calculatePValueFromFStats() {
         }        // Use F-distribution from jStat library to calculate p-value
         loadJStat().then(() => {
             // Calculate right-tail probability P(X >= fStatistic)
-            const pValue = 1 - jStat.centralF.cdf(fStatistic, df1, df2);
+            const pValue = 1 - jStat.centralF.cdf(fStatistic, df1, df2);            // Display results with LaTeX formatting
+            const pValueLatex = `
+                <h4>F-statistic p-value:</h4>
+                <p>$$F = ${formatNumberForLatex(fStatistic)}$$</p>
+                <p>$$p = P(F_{${df1}, ${df2}} \\geq ${formatNumberForLatex(fStatistic)}) = ${formatNumberForLatex(pValue)}$$</p>
+            `;
             
-            // Display results
-            document.getElementById('f-p-value').textContent = 
-                `The calculated p-value is: ${formatNumber(pValue, 6)}`;
-            document.getElementById('f-stats-result').hidden = false;
+            updateWithLatex('f-p-value', pValueLatex);
+            showResultContainer('f-stats-result');
         });
         
     } catch (error) {

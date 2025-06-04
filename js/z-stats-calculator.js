@@ -16,12 +16,20 @@ function calculatePValueFromZStats() {
             const singleTailP = 1 - jStat.normal.cdf(absZ, 0, 1);
             
             // Calculate double-tail p-value
-            const doubleTailP = singleTailP * 2;
+            const doubleTailP = singleTailP * 2;            // Display results with LaTeX formatting
+            const singleTailLatex = `
+                <h4>Single-tail p-value:</h4>
+                <p>$$p = P(Z \\geq |${formatNumberForLatex(zValue)}|) = ${formatNumberForLatex(singleTailP)}$$</p>
+            `;
             
-            // Display results
-            document.getElementById('z-single-tail-p').textContent = `Single-tail p-value: ${formatNumber(singleTailP)}`;
-            document.getElementById('z-double-tail-p').textContent = `Double-tail p-value: ${formatNumber(doubleTailP)}`;
-            document.getElementById('z-stats-result').hidden = false;
+            const doubleTailLatex = `
+                <h4>Double-tail p-value:</h4>
+                <p>$$p = 2 \\times P(Z \\geq |${formatNumberForLatex(zValue)}|) = ${formatNumberForLatex(doubleTailP)}$$</p>
+            `;
+            
+            updateWithLatex('z-single-tail-p', singleTailLatex);
+            updateWithLatex('z-double-tail-p', doubleTailLatex);
+            showResultContainer('z-stats-result');
         });
         
     } catch (error) {

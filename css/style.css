@@ -1,0 +1,160 @@
+/* Statistical Calculator - Sober.js Framework Styles */
+
+html, body {
+    height: 100%;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+.container {
+    padding: 1.25rem;
+    max-width: 75rem; /* 1200px */
+    margin: 0 auto;
+    height: 100%;
+    overflow-y: auto;
+    background-color: var(--s-color-background);
+}
+
+h1 {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+}
+
+h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.divider {
+    height: 1px;
+    background-color: var(--s-color-outline-variant);
+    margin: 1.5rem 0;
+    width: 100%;
+}
+
+.result {
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: var(--s-color-surface-container);
+    border-radius: 0.25rem;
+}
+
+.accordion {
+    width: 100%;
+    border: none;
+}
+
+.accordion-item {
+    margin-bottom: 0.5rem;
+    border: 1px solid var(--s-color-outline-variant);
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.accordion-header {
+    padding: 1rem;
+    background-color: var(--s-color-surface-container);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.accordion-header:hover {
+    background-color: var(--s-color-surface-container-high);
+}
+
+.accordion-header-icon {
+    margin-right: 1rem;
+    font-weight: bold;
+    width: 1.5rem;
+    text-align: center;
+    color: var(--s-color-on-surface);
+}
+
+.accordion-header-title {
+    font-weight: 500;
+    color: var(--s-color-on-surface);
+}
+
+.accordion-header-description {
+    font-size: 0.875rem;
+    color: var(--s-color-on-surface-variant);
+    margin-top: 0.25rem;
+}
+
+.accordion-content {
+    padding: 1rem;
+    border-top: 1px solid var(--s-color-outline-variant);
+    background-color: var(--s-color-surface);
+}
+
+.button-container {
+    margin-top: 1rem;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.button-container s-button {
+    background-color: var(--s-color-primary);
+    color: var(--s-color-on-primary);
+}
+
+.button-container s-button[color="default"] {
+    background-color: var(--s-color-surface-container);
+    color: var(--s-color-on-background);
+}
+
+.hidden {
+    display: none;
+}
+
+/* 媒体查询 - 平板设备 */
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+    
+    .accordion-header {
+        padding: 0.75rem;
+    }
+    
+    .accordion-content {
+        padding: 0.75rem;
+    }
+}
+
+/* 媒体查询 - 移动设备 */
+@media (max-width: 425px) {
+    .container {
+        padding: 0.75rem;
+    }
+    
+    h1 {
+        font-size: 1.5rem;
+    }
+    
+    h2 {
+        font-size: 1.25rem;
+    }
+    
+    .accordion-header-icon {
+        margin-right: 0.5rem;
+    }
+}
+
+/* 触屏设备 */
+@media (pointer: coarse) {
+    .accordion-header {
+        padding-top: 0.875rem;
+        padding-bottom: 0.875rem;
+    }
+    
+    .button-container s-button {
+        min-height: 2.5rem;
+    }
+}

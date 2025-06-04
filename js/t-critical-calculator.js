@@ -23,13 +23,20 @@ function calculateTCriticalValue() {
             
             // Calculate left-tailed critical value - inverse cumulative distribution at alpha
             const tCritLeft = jStat.studentt.inv(alpha, df);
+              // Display results with LaTeX formatting
+            const rightTailLatex = `
+                <h4>Right-tailed t critical value:</h4>
+                <p>$$t_{\\alpha=${formatNumberForLatex(alpha)}, \\text{DoF}=${df}} = ${formatNumberForLatex(tCritRight)}$$</p>
+            `;
             
-            // Display results
-            document.getElementById('t-crit-right').textContent = 
-                `Right-tailed t critical value (Significance Level=${alpha}, Degrees of Freedom=${df}): ${formatNumber(tCritRight, 6)}`;
-            document.getElementById('t-crit-left').textContent = 
-                `Left-tailed t critical value (Significance Level=${alpha}, Degrees of Freedom=${df}): ${formatNumber(tCritLeft, 6)}`;
-            document.getElementById('t-crit-result').hidden = false;
+            const leftTailLatex = `
+                <h4>Left-tailed t critical value:</h4>
+                <p>$$t_{\\alpha=${formatNumberForLatex(alpha)}, \\text{DoF}=${df}} = ${formatNumberForLatex(tCritLeft)}$$</p>
+            `;
+            
+            updateWithLatex('t-crit-right', rightTailLatex);
+            updateWithLatex('t-crit-left', leftTailLatex);
+            showResultContainer('t-crit-result');
         });
         
     } catch (error) {

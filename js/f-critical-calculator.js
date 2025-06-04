@@ -24,12 +24,14 @@ function calculateFCriticalValue() {
         }        // Use F-distribution from jStat library to calculate critical value
         loadJStat().then(() => {
             // Calculate F critical value - inverse cumulative distribution function at (1-alpha)
-            const fCritical = jStat.centralF.inv(1 - alpha, df1, df2);
+            const fCritical = jStat.centralF.inv(1 - alpha, df1, df2);            // Display results with LaTeX formatting
+            const fCriticalLatex = `
+                <h4>F critical value:</h4>
+                <p>$$F_{\\alpha=${formatNumberForLatex(alpha)},\\text{DoF}_1=${df1},\\text{DoF}_2=${df2}} = ${formatNumberForLatex(fCritical)}$$</p>
+            `;
             
-            // Display results
-            document.getElementById('f-critical-value').textContent = 
-                `F critical value: F_(${df1}, ${df2}) at Significance Level= ${alpha} is ${formatNumber(fCritical, 4)}`;
-            document.getElementById('f-crit-result').hidden = false;
+            updateWithLatex('f-critical-value', fCriticalLatex);
+            showResultContainer('f-crit-result');
         });
         
     } catch (error) {

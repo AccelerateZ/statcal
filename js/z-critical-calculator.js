@@ -23,15 +23,26 @@ function calculateZCriticalValue() {
             
             // Calculate two-tailed critical value
             const zCritTwoTail = jStat.normal.inv(1 - alpha/2, 0, 1);
+              // Display results with LaTeX formatting
+            const rightTailLatex = `
+                <h4>Right-tailed z critical value:</h4>
+                <p>$$z_{\\alpha=${formatNumberForLatex(alpha)}} = ${formatNumberForLatex(zCritRight)}$$</p>
+            `;
             
-            // Display results
-            document.getElementById('z-crit-right').textContent = 
-                `Right-tailed z critical value (Significance Level=${alpha}): ${formatNumber(zCritRight, 6)}`;
-            document.getElementById('z-crit-left').textContent = 
-                `Left-tailed z critical value (Significance Level=${alpha}): ${formatNumber(zCritLeft, 6)}`;
-            document.getElementById('z-crit-two-tail').textContent = 
-                `Two-tailed z critical value (Significance Level=${alpha}): ${formatNumber(zCritTwoTail, 6)}`;
-            document.getElementById('z-crit-result').hidden = false;
+            const leftTailLatex = `
+                <h4>Left-tailed z critical value:</h4>
+                <p>$$z_{\\alpha=${formatNumberForLatex(alpha)}} = ${formatNumberForLatex(zCritLeft)}$$</p>
+            `;
+            
+            const twoTailLatex = `
+                <h4>Two-tailed z critical value:</h4>
+                <p>$$z_{\\alpha/2=${formatNumberForLatex(alpha/2)}} = \\pm${formatNumberForLatex(zCritTwoTail)}$$</p>
+            `;
+            
+            updateWithLatex('z-crit-right', rightTailLatex);
+            updateWithLatex('z-crit-left', leftTailLatex);
+            updateWithLatex('z-crit-two-tail', twoTailLatex);
+            showResultContainer('z-crit-result');
         });
         
     } catch (error) {

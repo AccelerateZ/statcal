@@ -22,11 +22,20 @@ function calculatePValueFromTStats() {
         loadJStat().then(() => {
             const absT = Math.abs(tValue);
             const singleTailP = 1 - jStat.studentt.cdf(absT, dof);
-            const doubleTailP = singleTailP * 2;
-              // Display results
-            document.getElementById('single-tail-p').textContent = `Single-tail p-value: ${formatNumber(singleTailP)}`;
-            document.getElementById('double-tail-p').textContent = `Double-tail p-value: ${formatNumber(doubleTailP)}`;
-            document.getElementById('t-stats-result').hidden = false;
+            const doubleTailP = singleTailP * 2;            // Display results with LaTeX formatting
+            const singleTailLatex = `
+                <h4>Single-tail p-value:</h4>
+                <p>$$p = P(T_{${dof}} \\geq |${formatNumberForLatex(tValue)}|) = ${formatNumberForLatex(singleTailP)}$$</p>
+            `;
+            
+            const doubleTailLatex = `
+                <h4>Double-tail p-value:</h4>
+                <p>$$p = 2 \\times P(T_{${dof}} \\geq |${formatNumberForLatex(tValue)}|) = ${formatNumberForLatex(doubleTailP)}$$</p>
+            `;
+            
+            updateWithLatex('single-tail-p', singleTailLatex);
+            updateWithLatex('double-tail-p', doubleTailLatex);
+            showResultContainer('t-stats-result');
         });
         
     } catch (error) {

@@ -1,255 +1,302 @@
 <!DOCTYPE html>
-<html lang="en" class="mdui-theme-auto">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Statistical Calculator</title>
-    <!-- MDUI CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/mdui@2/mdui.css">
-    <!-- Material Icons -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <!-- 导入折叠面板组件 -->
-    <script type="module">
-        import 'https://unpkg.com/mdui@2/components/collapse.js';
-        import 'https://unpkg.com/mdui@2/components/collapse-item.js';
+
+    <!-- Sober.js -->
+    <script src="https://unpkg.com/sober/dist/sober.min.js"></script>
+
+    <!-- Google Fonts - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+        rel="stylesheet">    <!-- jStat for statistical calculations -->
+    <script src="https://cdn.jsdelivr.net/npm/jstat@latest/dist/jstat.min.js"></script>
+    
+    <!-- MathJax for LaTeX math rendering -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            }
+        };
     </script>
-    <style>
-        body {
-            padding: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <!-- External CSS -->
+    <link rel="stylesheet" href="css/style.css">
 
-        .container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: center;
-        }
-
-        .result {
-            margin-top: 16px;
-            padding: 16px;
-            background-color: #f5f5f5;
-            border-radius: 4px;
-        }
-    </style>
+    <script type="module">
+        import { createScheme } from 'https://unpkg.com/sober-theme/dist/main.js'
+        createScheme('#242423', { page: document.querySelector('s-page') })
+    </script>
 </head>
 
 <body>
-    <div class="mdui-prose">
+<s-page theme="auto">
+    <div class="container">
         <h1>Probability and Statistics Calculator</h1>
+
         <h2>Probability Calculator</h2>
-        Under construction.
-        <mdui-divider></mdui-divider>
-        <h2>Critical Values Calculator</h2>
-        <mdui-card-content>            <mdui-collapse accordion> 
-                <!-- Calculate z Critical Value -->
-                <mdui-collapse-item>
-                    <div slot="header" style="display: flex; align-items: center; padding: 12px 0;">
-                        <mdui-icon style="margin-right: 16px;">Z</mdui-icon>
-                        <div>
-                            <div style="font-size: 16px; font-weight: 500;">Calculate z Critical Value</div>
-                            <div style="font-size: 14px; color: rgba(0, 0, 0, 0.6);">Calculate z critical value based on
-                                significance level (standard normal distribution)</div>
-                        </div>
-                    </div>
-                    <div style="padding: 16px;">
-                        <mdui-text-field id="z-crit-alpha" label="Significance Level"></mdui-text-field>
-                        <div id="z-crit-result" class="result" hidden>
-                            <p id="z-crit-left"></p>
-                            <p id="z-crit-right"></p>
-                            <p id="z-crit-two-tail"></p>
-                        </div>
-                        <div style="margin-top: 16px;">
-                            <mdui-button onclick="calculateZCriticalValue()">Calculate</mdui-button>
-                            <mdui-button onclick="clearForm('z-crit-alpha', 'z-crit-result')">Clear</mdui-button>
-                        </div>
-                    </div>
-                </mdui-collapse-item>
-                <!-- Calculate t Critical Value -->
-                <mdui-collapse-item>
-                    <div slot="header" style="display: flex; align-items: center; padding: 12px 0;">
-                        <mdui-icon style="margin-right: 16px;">T</mdui-icon>
-                        <div>
-                            <div style="font-size: 16px; font-weight: 500;">Calculate t Critical Value</div>
-                            <div style="font-size: 14px; color: rgba(0, 0, 0, 0.6);">Calculate t critical value based on
-                                degrees of freedom and significance level</div>
-                        </div>
-                    </div>
-                    <div style="padding: 16px;">
-                        <mdui-text-field id="t-crit-alpha" label="Significance Level"></mdui-text-field>
-                        <mdui-text-field id="t-crit-df" label="Degrees of Freedom"></mdui-text-field>
-                        <div id="t-crit-result" class="result" hidden>
-                            <p id="t-crit-right"></p>
-                            <p id="t-crit-left"></p>
-                        </div>
-                        <div style="margin-top: 16px;">
-                            <mdui-button onclick="calculateTCriticalValue()">Calculate</mdui-button>
-                            <mdui-button
-                                onclick="clearForm('t-crit-alpha', 't-crit-df', 't-crit-result')">Clear</mdui-button>
-                        </div>
-                    </div>
-                </mdui-collapse-item>                <mdui-collapse-item>
-                    <div slot="header" style="display: flex; align-items: center; padding: 12px 0;">
-                        <mdui-icon style="margin-right: 16px;">F</mdui-icon>
-                        <div>
-                            <div style="font-size: 16px; font-weight: 500;">Calculate F Critical Value</div>
-                            <div style="font-size: 14px; color: rgba(0, 0, 0, 0.6);">Calculate F critical value based on
-                                degrees of freedom and significance level</div>
-                        </div>
-                    </div>
-                    <div style="padding: 16px;">
-                        <mdui-text-field id="f-alpha" label="Significance Level"></mdui-text-field>
-                        <mdui-text-field id="f-crit-df1"
-                            label="Degrees of Freedom for Larger Variance Data"></mdui-text-field>
-                        <mdui-text-field id="f-crit-df2"
-                            label="Degrees of Freedom for Smaller Variance Data"></mdui-text-field>
-                        <div id="f-crit-result" class="result" hidden>
-                            <p id="f-critical-value"></p>
-                        </div>
-                        <div style="margin-top: 16px;">
-                            <mdui-button onclick="calculateFCriticalValue()">Calculate</mdui-button>
-                            <mdui-button
-                                onclick="clearForm('f-crit-df1', 'f-crit-df2', 'f-alpha', 'f-crit-result')">Clear</mdui-button>
-                        </div>
-                    </div>
-                </mdui-collapse-item>
-                <!-- Calculate Chi-square Critical Value -->
-                <mdui-collapse-item>
-                    <div slot="header" style="display: flex; align-items: center; padding: 12px 0;">
-                        <mdui-icon style="margin-right: 16px;">χ²</mdui-icon>
-                        <div>
-                            <div style="font-size: 16px; font-weight: 500;">Calculate Chi-square Critical Value</div>
-                            <div style="font-size: 14px; color: rgba(0, 0, 0, 0.6);">Calculate chi-square critical value based on
-                                degrees of freedom and significance level</div>
-                        </div>
-                    </div>
-                    <div style="padding: 16px;">
-                        <mdui-text-field id="chi-square-crit-alpha" label="Significance Level"></mdui-text-field>
-                        <mdui-text-field id="chi-square-crit-df" label="Degrees of Freedom"></mdui-text-field>
-                        <div id="chi-square-crit-result" class="result" hidden>
-                            <p id="chi-square-critical-value"></p>
-                        </div>
-                        <div style="margin-top: 16px;">
-                            <mdui-button onclick="calculateChiSquareCriticalValue()">Calculate</mdui-button>
-                            <mdui-button
-                                onclick="clearForm('chi-square-crit-alpha', 'chi-square-crit-df', 'chi-square-crit-result')">Clear</mdui-button>
-                        </div>
-                    </div>
-                </mdui-collapse-item>
-            </mdui-collapse>
-        </mdui-card-content> <mdui-divider></mdui-divider>
-        <h2>P-value Calculator</h2>        <mdui-card-content>
-            <mdui-collapse accordion>
-                <!-- Calculate p-value from z-statistic -->
-                <mdui-collapse-item>
-                    <div slot="header" style="display: flex; align-items: center; padding: 12px 0;">
-                        <mdui-icon style="margin-right: 16px;">Z</mdui-icon>
-                        <div>
-                            <div style="font-size: 16px; font-weight: 500;">Calculate p-value from z-statistic</div>
-                            <div style="font-size: 14px; color: rgba(0, 0, 0, 0.6);">Calculate p-value based on
-                                z-statistic (standard normal distribution)</div>
-                        </div>
-                    </div>
-                    <div style="padding: 16px;">
-                        <mdui-text-field id="z-value" label="z-statistic value"></mdui-text-field>
-                        <div id="z-stats-result" class="result" hidden>
-                            <p id="z-single-tail-p"></p>
-                            <p id="z-double-tail-p"></p>
-                        </div>
-                        <div style="margin-top: 16px;">
-                            <mdui-button onclick="calculatePValueFromZStats()">Calculate</mdui-button>
-                            <mdui-button onclick="clearForm('z-value', 'z-stats-result')">Clear</mdui-button>
-                        </div>
-                    </div>
-                </mdui-collapse-item>
-                
-                <!-- Calculate p-value from t-statistic --> 
-                <mdui-collapse-item>
-                    <div slot="header" style="display: flex; align-items: center; padding: 12px 0;">
-                        <mdui-icon style="margin-right: 16px;">T</mdui-icon>
-                        <div>
-                            <div style="font-size: 16px; font-weight: 500;">Calculate p-value from t-statistic</div>
-                            <div style="font-size: 14px; color: rgba(0, 0, 0, 0.6);">Calculate p-value based on
-                                t-statistic and degrees of freedom</div>
-                        </div>
-                    </div>
-                    <div style="padding: 16px;">
-                        <mdui-text-field id="t-value" label="t-statistic value"></mdui-text-field>
-                        <mdui-text-field id="t-dof" label="Degrees of freedom"></mdui-text-field>
-                        <div id="t-stats-result" class="result" hidden>
-                            <p id="single-tail-p"></p>
-                            <p id="double-tail-p"></p>
-                        </div>
-                        <div style="margin-top: 16px;">
-                            <mdui-button onclick="calculatePValueFromTStats()">Calculate</mdui-button>
-                            <mdui-button onclick="clearForm('t-value', 't-dof', 't-stats-result')">Clear</mdui-button>
-                        </div>
-                    </div>
-                </mdui-collapse-item> <!-- Calculate p-value from F-statistic -->                <mdui-collapse-item>
-                    <div slot="header" style="display: flex; align-items: center; padding: 12px 0;">
-                        <mdui-icon style="margin-right: 16px;">F</mdui-icon>
-                        <div>
-                            <div style="font-size: 16px; font-weight: 500;">Calculate p-value from F-statistic</div>
-                            <div style="font-size: 14px; color: rgba(0, 0, 0, 0.6);">Calculate p-value based on
-                                F-statistic and degrees of freedom</div>
-                        </div>
-                    </div>
-                    <div style="padding: 16px;">
-                        <mdui-text-field id="f-statistic" label="F-statistic value"></mdui-text-field>
-                        <mdui-text-field id="f-df1" label="Degrees of Freedom for Larger Variance Data"></mdui-text-field>
-                        <mdui-text-field id="f-df2" label="Degrees of Freedom for Smaller Variance Data"></mdui-text-field>
-                        <div id="f-stats-result" class="result" hidden>
-                            <p id="f-p-value"></p>
-                        </div>
-                        <div style="margin-top: 16px;">
-                            <mdui-button onclick="calculatePValueFromFStats()">Calculate</mdui-button>
-                            <mdui-button
-                                onclick="clearForm('f-statistic', 'f-df1', 'f-df2', 'f-stats-result')">Clear</mdui-button>
-                        </div>
-                    </div>
-                </mdui-collapse-item>
-                <!-- Calculate p-value from Chi-square statistic -->
-                <mdui-collapse-item>
-                    <div slot="header" style="display: flex; align-items: center; padding: 12px 0;">
-                        <mdui-icon style="margin-right: 16px;">χ²</mdui-icon>
-                        <div>
-                            <div style="font-size: 16px; font-weight: 500;">Calculate p-value from Chi-square statistic</div>
-                            <div style="font-size: 14px; color: rgba(0, 0, 0, 0.6);">Calculate p-value based on
-                                chi-square statistic and degrees of freedom</div>
-                        </div>
-                    </div>
-                    <div style="padding: 16px;">
-                        <mdui-text-field id="chi-square-value" label="Chi-square value"></mdui-text-field>
-                        <mdui-text-field id="chi-square-df" label="Degrees of Freedom"></mdui-text-field>
-                        <div id="chi-square-stats-result" class="result" hidden>
-                            <p id="chi-square-p-value"></p>
-                        </div>
-                        <div style="margin-top: 16px;">
-                            <mdui-button onclick="calculatePValueFromChiSquareStats()">Calculate</mdui-button>
-                            <mdui-button
-                                onclick="clearForm('chi-square-value', 'chi-square-df', 'chi-square-stats-result')">Clear</mdui-button>
-                        </div>
-                    </div>
-                </mdui-collapse-item>
+        <p>Under construction.</p>
 
+        <div class="divider"></div>
 
-        </mdui-card-content>
-        </mdui-card>
-    </div>    <!-- MDUI JS -->
-    <script src="https://unpkg.com/mdui@2/mdui.global.js"></script>
-    <!-- 引入计算模块 -->
+    <h2>Critical Values Calculator</h2>
+
+    <!-- Z Critical Value -->
+    <div class="accordion-item">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+            <div class="accordion-header-icon">Z</div>
+            <div>
+                <div class="accordion-header-title">Calculate z Critical Value</div>
+                <div class="accordion-header-description">Calculate z critical value based on significance level
+                    (standard normal distribution)</div>
+            </div>
+        </div>
+        <div class="accordion-content hidden">
+            <div>
+                <s-text-field id="z-crit-alpha" label="Significance Level"></s-text-field>
+            </div>
+            <div id="z-crit-result" class="result hidden">
+                <p id="z-crit-left"></p>
+                <p id="z-crit-right"></p>
+                <p id="z-crit-two-tail"></p>
+            </div>
+            <div class="button-container">
+                <s-button onclick="calculateZCriticalValue()">Calculate</s-button>
+                <s-button color="default" onclick="clearForm('z-crit-alpha', 'z-crit-result')">Clear</s-button>
+            </div>
+        </div>
+    </div>
+
+    <!-- T Critical Value -->
+    <div class="accordion-item">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+            <div class="accordion-header-icon">T</div>
+            <div>
+                <div class="accordion-header-title">Calculate t Critical Value</div>
+                <div class="accordion-header-description">Calculate t critical value based on degrees of freedom and
+                    significance level</div>
+            </div>
+        </div>
+        <div class="accordion-content hidden">
+            <div>
+                <s-text-field id="t-crit-alpha" label="Significance Level"></s-text-field>
+            </div>
+            <div>
+                <s-text-field id="t-crit-df" label="Degrees of Freedom"></s-text-field>
+            </div>
+            <div id="t-crit-result" class="result hidden">
+                <p id="t-crit-right"></p>
+                <p id="t-crit-left"></p>
+            </div>
+            <div class="button-container">
+                <s-button onclick="calculateTCriticalValue()">Calculate</s-button>
+                <s-button color="default"
+                    onclick="clearForm('t-crit-alpha', 't-crit-df', 't-crit-result')">Clear</s-button>
+            </div>
+        </div>
+    </div>
+
+    <!-- F Critical Value -->
+    <div class="accordion-item">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+            <div class="accordion-header-icon">F</div>
+            <div>
+                <div class="accordion-header-title">Calculate F Critical Value</div>
+                <div class="accordion-header-description">Calculate F critical value based on degrees of freedom and
+                    significance level</div>
+            </div>
+        </div>
+        <div class="accordion-content hidden">
+            <div>
+                <s-text-field id="f-alpha" label="Significance Level"></s-text-field>
+            </div>
+            <div>
+                <s-text-field id="f-crit-df1" label="DoF for Larger Variance Data"></s-text-field>
+            </div>
+            <div>
+                <s-text-field id="f-crit-df2" label="DoF for Smaller Variance Data"></s-text-field>
+            </div>
+            <div id="f-crit-result" class="result hidden">
+                <p id="f-critical-value"></p>
+            </div>
+            <div class="button-container">
+                <s-button onclick="calculateFCriticalValue()">Calculate</s-button>
+                <s-button color="default"
+                    onclick="clearForm('f-crit-df1', 'f-crit-df2', 'f-alpha', 'f-crit-result')">Clear</s-button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chi-square Critical Value -->
+    <div class="accordion-item">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+            <div class="accordion-header-icon">χ²</div>
+            <div>
+                <div class="accordion-header-title">Calculate Chi-square Critical Value</div>
+                <div class="accordion-header-description">Calculate chi-square critical value based on degrees of
+                    freedom and significance level</div>
+            </div>
+        </div>
+        <div class="accordion-content hidden">
+            <div>
+                <s-text-field id="chi-square-crit-alpha" label="Significance Level"></s-text-field>
+            </div>
+            <div>
+                <s-text-field id="chi-square-crit-df" label="Degrees of Freedom"></s-text-field>
+            </div>
+            <div id="chi-square-crit-result" class="result hidden">
+                <p id="chi-square-critical-value"></p>
+            </div>
+            <div class="button-container">
+                <s-button onclick="calculateChiSquareCriticalValue()">Calculate</s-button>
+                <s-button color="default"
+                    onclick="clearForm('chi-square-crit-alpha', 'chi-square-crit-df', 'chi-square-crit-result')">Clear</s-button>
+            </div>
+        </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <h2>P-value Calculator</h2>
+
+    <!-- Z P-value -->
+    <div class="accordion-item">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+            <div class="accordion-header-icon">Z</div>
+            <div>
+                <div class="accordion-header-title">Calculate p-value from z-statistic</div>
+                <div class="accordion-header-description">Calculate p-value based on z-statistic (standard normal
+                    distribution)</div>
+            </div>
+        </div>
+        <div class="accordion-content hidden">
+            <div>
+                <s-text-field id="z-value" label="z-statistic value"></s-text-field>
+            </div>
+            <div id="z-stats-result" class="result hidden">
+                <p id="z-single-tail-p"></p>
+                <p id="z-double-tail-p"></p>
+            </div>
+            <div class="button-container">
+                <s-button onclick="calculatePValueFromZStats()">Calculate</s-button>
+                <s-button color="default" onclick="clearForm('z-value', 'z-stats-result')">Clear</s-button>
+            </div>
+        </div>
+    </div>
+
+    <!-- T P-value -->
+    <div class="accordion-item">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+            <div class="accordion-header-icon">T</div>
+            <div>
+                <div class="accordion-header-title">Calculate p-value from t-statistic</div>
+                <div class="accordion-header-description">Calculate p-value based on t-statistic and degrees of freedom
+                </div>
+            </div>
+        </div>
+        <div class="accordion-content hidden">
+            <div>
+                <s-text-field id="t-value" label="t-statistic value"></s-text-field>
+            </div>
+            <div>
+                <s-text-field id="t-dof" label="Degrees of freedom"></s-text-field>
+            </div>
+            <div id="t-stats-result" class="result hidden">
+                <p id="single-tail-p"></p>
+                <p id="double-tail-p"></p>
+            </div>
+            <div class="button-container">
+                <s-button onclick="calculatePValueFromTStats()">Calculate</s-button>
+                <s-button color="default" onclick="clearForm('t-value', 't-dof', 't-stats-result')">Clear</s-button>
+            </div>
+        </div>
+    </div>
+
+    <!-- F P-value -->
+    <div class="accordion-item">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+            <div class="accordion-header-icon">F</div>
+            <div>
+                <div class="accordion-header-title">Calculate p-value from F-statistic</div>
+                <div class="accordion-header-description">Calculate p-value based on F-statistic and degrees of freedom
+                </div>
+            </div>
+        </div>
+        <div class="accordion-content hidden">
+            <div>
+                <s-text-field id="f-statistic" label="F-statistic value"></s-text-field>
+            </div>
+            <div>
+                <s-text-field id="f-df1" label="DoF for Larger Variance Data"></s-text-field>
+            </div>
+            <div>
+                <s-text-field id="f-df2" label="DoF for Smaller Variance Data"></s-text-field>
+            </div>
+            <div id="f-stats-result" class="result hidden">
+                <p id="f-p-value"></p>
+            </div>
+            <div class="button-container">
+                <s-button onclick="calculatePValueFromFStats()">Calculate</s-button>
+                <s-button color="default"
+                    onclick="clearForm('f-statistic', 'f-df1', 'f-df2', 'f-stats-result')">Clear</s-button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chi-square P-value -->
+    <div class="accordion-item">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+            <div class="accordion-header-icon">χ²</div>
+            <div>
+                <div class="accordion-header-title">Calculate p-value from Chi-square statistic</div>
+                <div class="accordion-header-description">Calculate p-value based on chi-square statistic and degrees of
+                    freedom</div>
+            </div>
+        </div>
+        <div class="accordion-content hidden">
+            <div>
+                <s-text-field id="chi-square-value" label="Chi-square value"></s-text-field>
+            </div>
+            <div>
+                <s-text-field id="chi-square-df" label="Degrees of Freedom"></s-text-field>
+            </div>
+            <div id="chi-square-stats-result" class="result hidden">
+                <p id="chi-square-p-value"></p>
+            </div>
+            <div class="button-container">
+                <s-button onclick="calculatePValueFromChiSquareStats()">Calculate</s-button>
+                <s-button color="default"
+                    onclick="clearForm('chi-square-value', 'chi-square-df', 'chi-square-stats-result')">Clear</s-button>            </div>
+        </div>
+    </div>
+    </div><!-- 关闭 container -->
+    <!-- Utility scripts -->
     <script src="js/util.js"></script>
-    <script src="js/t-stats-calculator.js"></script>
-    <script src="js/f-stats-calculator.js"></script>
-    <script src="js/z-stats-calculator.js"></script>
-    <script src="js/chi-square-stats-calculator.js"></script>
-    <script src="js/f-critical-calculator.js"></script>
-    <script src="js/t-critical-calculator.js"></script>
+
+    <!-- Calculator scripts -->
     <script src="js/z-critical-calculator.js"></script>
+    <script src="js/t-critical-calculator.js"></script>
+    <script src="js/f-critical-calculator.js"></script>
     <script src="js/chi-square-critical-calculator.js"></script>
+    <script src="js/z-stats-calculator.js"></script>
+    <script src="js/t-stats-calculator.js"></script>
+    <script src="js/f-stats-calculator.js"></script>    <script src="js/chi-square-stats-calculator.js"></script>
+    <!-- Accordion functionality is provided by util.js -->
+</s-page>
 </body>
 
 </html>
