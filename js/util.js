@@ -164,3 +164,82 @@ function formatNumberForLatex(num, digits = 4) {
         return num.toFixed(digits);
     }
 }
+
+// Enable text selection on page load
+window.addEventListener('DOMContentLoaded', function() {
+    // Remove any potential text selection disabling
+    document.body.style.webkitUserSelect = 'text';
+    document.body.style.mozUserSelect = 'text';
+    document.body.style.msUserSelect = 'text';
+    document.body.style.userSelect = 'text';
+    
+    // Ensure MathJax elements are selectable when they load
+    if (window.MathJax) {
+        MathJax.startup.registerStartupHook('end', function() {
+            const mathElements = document.querySelectorAll('.MathJax, .MathJax_Display');
+            mathElements.forEach(function(element) {
+                element.style.webkitUserSelect = 'text';
+                element.style.mozUserSelect = 'text';
+                element.style.msUserSelect = 'text';
+                element.style.userSelect = 'text';
+            });
+        });
+    }
+});
+
+// Override any potential disabling functions
+if (typeof jQuery !== 'undefined' && jQuery.fn.disableSelection) {
+    jQuery.fn.disableSelection = function() {
+        return this; // Do nothing
+    };
+}
+
+// Initialize default values for all s-picker components
+function initializePickers() {
+    // Set default values for all calculation type pickers
+    const pickerDefaults = {
+        'normal-calc-type-picker': 'less-than',
+        'binomial-calc-type-picker': 'exact',
+        'poisson-calc-type-picker': 'exact',
+        'exponential-calc-type-picker': 'less-than',
+        'gamma-calc-type-picker': 'less-than',
+        'beta-calc-type-picker': 'less-than',
+        'geometric-calc-type-picker': 'exact',
+        'hypergeometric-calc-type-picker': 'exact',
+        'lognormal-calc-type-picker': 'pdf',
+        'negbinom-calc-type-picker': 'exact',
+        'pareto-calc-type-picker': 'pdf',
+        'weibull-calc-type-picker': 'pdf'
+    };
+
+    // Map picker IDs to their toggle function names
+    const toggleFunctions = {
+        'normal-calc-type-picker': 'toggleNormalCalcType',
+        'binomial-calc-type-picker': 'toggleBinomialCalcType',
+        'poisson-calc-type-picker': 'togglePoissonCalcType',
+        'exponential-calc-type-picker': 'toggleExponentialCalcType',
+        'gamma-calc-type-picker': 'toggleGammaCalcType',
+        'beta-calc-type-picker': 'toggleBetaCalcType',
+        'geometric-calc-type-picker': 'toggleGeometricCalcType',
+        'hypergeometric-calc-type-picker': 'toggleHypergeometricCalcType',
+        'lognormal-calc-type-picker': 'toggleLognormalCalcType',
+        'negbinom-calc-type-picker': 'toggleNegBinomCalcType',
+        'pareto-calc-type-picker': 'toggleParetoCalcType',
+        'weibull-calc-type-picker': 'toggleWeibullCalcType'
+    };
+
+    Object.entries(pickerDefaults).forEach(([id, defaultValue]) => {
+        const picker = document.getElementById(id);
+        if (picker) {
+            picker.value = defaultValue;
+            // Trigger the toggle function to show/hide appropriate containers
+            const toggleFunction = toggleFunctions[id];
+            if (typeof window[toggleFunction] === 'function') {
+                window[toggleFunction]();
+            }
+        }
+    });
+}
+
+// Call initialization when DOM is loaded
+document.addEventListener('DOMContentLoaded', initializePickers);

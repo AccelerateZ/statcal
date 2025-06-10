@@ -46,10 +46,547 @@
 <body>
 <s-page theme="auto">
     <div class="container">
-        <h1>Probability and Statistics Calculator</h1>
+        <h1>Probability and Statistics Calculator</h1>        <h2>Probability Calculator</h2>
 
-        <h2>Probability Calculator</h2>
-        <p>Under construction.</p>
+        <!-- Normal Distribution -->
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <div class="accordion-header-icon">N</div>
+                <div>
+                    <div class="accordion-header-title">Normal Distribution</div>
+                    <div class="accordion-header-description">Calculate probabilities and percentiles for normal distribution</div>
+                </div>
+            </div>
+            <div class="accordion-content hidden">
+                <h4>Calculate Probabilities</h4>
+                <div>
+                    <s-text-field id="normal-mu" label="Mean (μ)"></s-text-field>
+                </div>
+                <div>
+                    <s-text-field id="normal-sigma" label="Standard Deviation (σ)"></s-text-field>
+                </div>
+                <div>
+                    <s-text-field id="normal-x1" label="X Value"></s-text-field>
+                </div>
+                <div id="normal-x2-container" class="hidden">
+                    <s-text-field id="normal-x2" label="X2 Value (for between)"></s-text-field>
+                </div>                <s-picker id="normal-calc-type-picker" label="Calculation Type" onchange="toggleNormalCalcType()">
+                    <s-picker-item value="less-than">P(X ≤ x)</s-picker-item>
+                    <s-picker-item value="greater-than">P(X > x)</s-picker-item>
+                    <s-picker-item value="between">P(x₁ < X ≤ x₂)</s-picker-item>
+                </s-picker>
+
+                <div id="normal-result" class="result hidden">
+                    <div id="normal-result-content"></div>
+                </div>
+
+                <div class="button-container">
+                    <s-button onclick="calculateNormalProbability()">Calculate Probability</s-button>
+                    <s-button color="default" onclick="clearForm('normal-mu', 'normal-sigma', 'normal-x1', 'normal-x2', 'normal-result')">Clear</s-button>
+                </div>
+
+                <hr>
+
+                <h4>Calculate Percentiles</h4>
+                <div>
+                    <s-text-field id="normal-perc-mu" label="Mean (μ)"></s-text-field>
+                </div>
+                <div>
+                    <s-text-field id="normal-perc-sigma" label="Standard Deviation (σ)"></s-text-field>
+                </div>
+                <div>
+                    <s-text-field id="normal-percentile" label="Percentile (0-100)"></s-text-field>
+                </div>
+
+                <div id="normal-percentile-result" class="result hidden">
+                    <div id="normal-percentile-result-content"></div>
+                </div>
+
+                <div class="button-container">
+                    <s-button onclick="calculateNormalPercentile()">Calculate Percentile</s-button>
+                    <s-button color="default" onclick="clearForm('normal-perc-mu', 'normal-perc-sigma', 'normal-percentile', 'normal-percentile-result')">Clear</s-button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Binomial Distribution -->
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <div class="accordion-header-icon">B</div>
+                <div>
+                    <div class="accordion-header-title">Binomial Distribution</div>
+                    <div class="accordion-header-description">Calculate probabilities for binomial distribution</div>
+                </div>
+            </div>
+            <div class="accordion-content hidden">
+                <div>
+                    <s-text-field id="binomial-n" label="Number of trials (n)"></s-text-field>
+                </div>
+                <div>
+                    <s-text-field id="binomial-p" label="Probability of success (p)"></s-text-field>
+                </div>
+                <div>
+                    <s-text-field id="binomial-x1" label="X Value"></s-text-field>
+                </div>
+                <div id="binomial-x2-container" class="hidden">
+                    <s-text-field id="binomial-x2" label="X2 Value (for between)"></s-text-field>
+                </div>                <s-picker id="binomial-calc-type-picker" label="Calculation Type" onchange="toggleBinomialCalcType()">
+                    <s-picker-item value="exact">P(X = x)</s-picker-item>
+                    <s-picker-item value="less-equal">P(X ≤ x)</s-picker-item>
+                    <s-picker-item value="greater-equal">P(X ≥ x)</s-picker-item>
+                    <s-picker-item value="between">P(x₁ ≤ X ≤ x₂)</s-picker-item>
+                </s-picker>
+
+                <div id="binomial-result" class="result hidden">
+                    <div id="binomial-result-content"></div>
+                </div>
+
+                <div class="button-container">
+                    <s-button onclick="calculateBinomialProbability()">Calculate</s-button>
+                    <s-button color="default" onclick="clearForm('binomial-n', 'binomial-p', 'binomial-x1', 'binomial-x2', 'binomial-result')">Clear</s-button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Poisson Distribution -->
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <div class="accordion-header-icon">P</div>
+                <div>
+                    <div class="accordion-header-title">Poisson Distribution</div>
+                    <div class="accordion-header-description">Calculate probabilities for Poisson distribution</div>
+                </div>
+            </div>
+            <div class="accordion-content hidden">
+                <div>
+                    <s-text-field id="poisson-lambda" label="Lambda (λ)"></s-text-field>
+                </div>
+                <div>
+                    <s-text-field id="poisson-x1" label="X Value"></s-text-field>
+                </div>
+                <div id="poisson-x2-container" class="hidden">
+                    <s-text-field id="poisson-x2" label="X2 Value (for between)"></s-text-field>
+                </div>                <s-picker id="poisson-calc-type-picker" label="Calculation Type" onchange="togglePoissonCalcType()">
+                    <s-picker-item value="exact">P(X = x)</s-picker-item>
+                    <s-picker-item value="less-equal">P(X ≤ x)</s-picker-item>
+                    <s-picker-item value="greater-equal">P(X ≥ x)</s-picker-item>
+                    <s-picker-item value="between">P(x₁ ≤ X ≤ x₂)</s-picker-item>
+                </s-picker>
+
+                <div id="poisson-result" class="result hidden">
+                    <div id="poisson-result-content"></div>
+                </div>
+
+                <div class="button-container">
+                    <s-button onclick="calculatePoissonProbability()">Calculate</s-button>
+                    <s-button color="default" onclick="clearForm('poisson-lambda', 'poisson-x1', 'poisson-x2', 'poisson-result')">Clear</s-button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Exponential Distribution -->
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <div class="accordion-header-icon">E</div>
+                <div>
+                    <div class="accordion-header-title">Exponential Distribution</div>
+                    <div class="accordion-header-description">Calculate probabilities and percentiles for exponential distribution</div>
+                </div>
+            </div>
+            <div class="accordion-content hidden">
+                <h4>Calculate Probabilities</h4>
+                <div>
+                    <s-text-field id="exponential-lambda" label="Lambda (λ)"></s-text-field>
+                </div>
+                <div>
+                    <s-text-field id="exponential-x1" label="X Value"></s-text-field>
+                </div>
+                <div id="exponential-x2-container" class="hidden">
+                    <s-text-field id="exponential-x2" label="X2 Value (for between)"></s-text-field>
+                </div>                <s-picker id="exponential-calc-type-picker" label="Calculation Type" onchange="toggleExponentialCalcType()">
+                    <s-picker-item value="less-than">P(X ≤ x)</s-picker-item>
+                    <s-picker-item value="greater-than">P(X > x)</s-picker-item>
+                    <s-picker-item value="between">P(x₁ < X ≤ x₂)</s-picker-item>
+                </s-picker>
+
+                <div id="exponential-result" class="result hidden">
+                    <div id="exponential-result-content"></div>
+                </div>
+
+                <div class="button-container">
+                    <s-button onclick="calculateExponentialProbability()">Calculate Probability</s-button>
+                    <s-button color="default" onclick="clearForm('exponential-lambda', 'exponential-x1', 'exponential-x2', 'exponential-result')">Clear</s-button>
+                </div>
+
+                <hr>
+
+                <h4>Calculate Percentiles</h4>
+                <div>
+                    <s-text-field id="exponential-perc-lambda" label="Lambda (λ)"></s-text-field>
+                </div>
+                <div>
+                    <s-text-field id="exponential-percentile" label="Percentile (0-100)"></s-text-field>
+                </div>
+
+                <div id="exponential-percentile-result" class="result hidden">
+                    <div id="exponential-percentile-result-content"></div>
+                </div>                <div class="button-container">
+                    <s-button onclick="calculateExponentialPercentile()">Calculate Percentile</s-button>
+                    <s-button color="default" onclick="clearForm('exponential-perc-lambda', 'exponential-percentile', 'exponential-percentile-result')">Clear</s-button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gamma Distribution -->
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <div class="accordion-header-icon">Γ</div>
+                <div>
+                    <div class="accordion-header-title">Gamma Distribution</div>
+                    <div class="accordion-header-description">Calculate probabilities and percentiles for Gamma distribution</div>
+                </div>
+            </div>
+            <div class="accordion-content hidden">
+                <h4>Calculate Probabilities</h4>
+                <div>
+                    <s-text-field id="gamma-alpha" label="Alpha (shape parameter)"></s-text-field>
+                </div>
+                <div>
+                    <s-text-field id="gamma-beta" label="Beta (scale parameter)"></s-text-field>
+                </div>
+                <div>
+                    <s-text-field id="gamma-x1" label="X Value"></s-text-field>
+                </div>
+                <div id="gamma-x2-container" class="hidden">
+                    <s-text-field id="gamma-x2" label="X2 Value (for between)"></s-text-field>
+                </div>                <s-picker id="gamma-calc-type-picker" label="Calculation Type" onchange="toggleGammaCalcType()">
+                    <s-picker-item value="less-than">P(X ≤ x)</s-picker-item>
+                    <s-picker-item value="greater-than">P(X > x)</s-picker-item>
+                    <s-picker-item value="between">P(x₁ < X ≤ x₂)</s-picker-item>
+                </s-picker>
+
+                <div id="gamma-result" class="result hidden">
+                    <div id="gamma-result-content"></div>
+                </div>
+
+                <div class="button-container">
+                    <s-button onclick="calculateGammaProbability()">Calculate Probability</s-button>
+                    <s-button color="default" onclick="clearForm('gamma-alpha', 'gamma-beta', 'gamma-x1', 'gamma-x2', 'gamma-result')">Clear</s-button>
+                </div>
+
+                <hr>
+
+                <h4>Calculate Percentiles</h4>
+                <div>
+                    <s-text-field id="gamma-perc-alpha" label="Alpha (shape parameter)"></s-text-field>
+                </div>
+                <div>
+                    <s-text-field id="gamma-perc-beta" label="Beta (scale parameter)"></s-text-field>
+                </div>
+                <div>
+                    <s-text-field id="gamma-percentile" label="Percentile (0-100)"></s-text-field>
+                </div>
+
+                <div id="gamma-percentile-result" class="result hidden">
+                    <div id="gamma-percentile-result-content"></div>
+                </div>
+
+                <div class="button-container">
+                    <s-button onclick="calculateGammaPercentile()">Calculate Percentile</s-button>
+                    <s-button color="default" onclick="clearForm('gamma-perc-alpha', 'gamma-perc-beta', 'gamma-percentile', 'gamma-percentile-result')">Clear</s-button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Beta Distribution -->
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <div class="accordion-header-icon">β</div>
+                <div>
+                    <div class="accordion-header-title">Beta Distribution</div>
+                    <div class="accordion-header-description">Calculate probabilities and percentiles for Beta distribution</div>
+                </div>
+            </div>
+            <div class="accordion-content hidden">
+                <h4>Calculate Probabilities</h4>
+                <div>
+                    <s-text-field id="beta-alpha" label="Alpha (shape parameter 1)"></s-text-field>
+                </div>
+                <div>
+                    <s-text-field id="beta-beta" label="Beta (shape parameter 2)"></s-text-field>
+                </div>
+                <div>
+                    <s-text-field id="beta-x1" label="X Value (0-1)"></s-text-field>
+                </div>
+                <div id="beta-x2-container" class="hidden">
+                    <s-text-field id="beta-x2" label="X2 Value (for between)"></s-text-field>
+                </div>                <s-picker id="beta-calc-type-picker" label="Calculation Type" onchange="toggleBetaCalcType()">
+                    <s-picker-item value="less-than">P(X ≤ x)</s-picker-item>
+                    <s-picker-item value="greater-than">P(X > x)</s-picker-item>
+                    <s-picker-item value="between">P(x₁ < X ≤ x₂)</s-picker-item>
+                </s-picker>
+
+                <div id="beta-result" class="result hidden">
+                    <div id="beta-result-content"></div>
+                </div>
+
+                <div class="button-container">
+                    <s-button onclick="calculateBetaProbability()">Calculate Probability</s-button>
+                    <s-button color="default" onclick="clearForm('beta-alpha', 'beta-beta', 'beta-x1', 'beta-x2', 'beta-result')">Clear</s-button>
+                </div>
+
+                <hr>
+
+                <h4>Calculate Percentiles</h4>
+                <div>
+                    <s-text-field id="beta-perc-alpha" label="Alpha (shape parameter 1)"></s-text-field>
+                </div>
+                <div>
+                    <s-text-field id="beta-perc-beta" label="Beta (shape parameter 2)"></s-text-field>
+                </div>
+                <div>
+                    <s-text-field id="beta-percentile" label="Percentile (0-100)"></s-text-field>
+                </div>
+
+                <div id="beta-percentile-result" class="result hidden">
+                    <div id="beta-percentile-result-content"></div>
+                </div>                <div class="button-container">
+                    <s-button onclick="calculateBetaPercentile()">Calculate Percentile</s-button>
+                    <s-button color="default" onclick="clearForm('beta-perc-alpha', 'beta-perc-beta', 'beta-percentile', 'beta-percentile-result')">Clear</s-button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Geometric Distribution -->
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <div class="accordion-header-icon">G</div>
+                <div>
+                    <div class="accordion-header-title">Geometric Distribution</div>
+                    <div class="accordion-header-description">Calculate probabilities for Geometric distribution (failures before first success)</div>
+                </div>
+            </div>
+            <div class="accordion-content hidden">
+                <div>
+                    <s-text-field id="geometric-p" label="Probability of Success (p)"></s-text-field>
+                </div>
+                <div>
+                    <s-text-field id="geometric-x1" label="Number of Failures (x)"></s-text-field>
+                </div>
+                <div id="geometric-x2-container" class="hidden">
+                    <s-text-field id="geometric-x2" label="X2 Value (for between)"></s-text-field>
+                </div>                <s-picker id="geometric-calc-type-picker" label="Calculation Type" onchange="toggleGeometricCalcType()">
+                    <s-picker-item value="exact">P(X = x)</s-picker-item>
+                    <s-picker-item value="less-equal">P(X ≤ x)</s-picker-item>
+                    <s-picker-item value="greater-equal">P(X ≥ x)</s-picker-item>
+                    <s-picker-item value="between">P(x₁ ≤ X ≤ x₂)</s-picker-item>
+                </s-picker>
+
+                <div id="geometric-result" class="result hidden">
+                    <div id="geometric-result-content"></div>
+                </div>
+
+                <div class="button-container">
+                    <s-button onclick="calculateGeometricProbability()">Calculate</s-button>
+                    <s-button color="default" onclick="clearForm('geometric-p', 'geometric-x1', 'geometric-x2', 'geometric-result')">Clear</s-button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hypergeometric Distribution -->
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <div class="accordion-header-icon">H</div>
+                <div>
+                    <div class="accordion-header-title">Hypergeometric Distribution</div>
+                    <div class="accordion-header-description">Calculate probabilities for Hypergeometric distribution (sampling without replacement)</div>
+                </div>
+            </div>
+            <div class="accordion-content hidden">
+                <div>
+                    <s-text-field id="hypergeometric-N" label="Population Size (N)"></s-text-field>
+                </div>
+                <div>
+                    <s-text-field id="hypergeometric-M" label="Number of Success States (M)"></s-text-field>
+                </div>
+                <div>
+                    <s-text-field id="hypergeometric-n" label="Number of Draws (n)"></s-text-field>
+                </div>
+                <div>
+                    <s-text-field id="hypergeometric-x1" label="Number of Successes (x)"></s-text-field>
+                </div>
+                <div id="hypergeometric-x2-container" class="hidden">
+                    <s-text-field id="hypergeometric-x2" label="X2 Value (for between)"></s-text-field>
+                </div>                <s-picker id="hypergeometric-calc-type-picker" label="Calculation Type" onchange="toggleHypergeometricCalcType()">
+                    <s-picker-item value="exact">P(X = x)</s-picker-item>
+                    <s-picker-item value="less-equal">P(X ≤ x)</s-picker-item>
+                    <s-picker-item value="greater-equal">P(X ≥ x)</s-picker-item>
+                    <s-picker-item value="between">P(x₁ ≤ X ≤ x₂)</s-picker-item>
+                </s-picker>
+
+                <div id="hypergeometric-result" class="result hidden">
+                    <div id="hypergeometric-result-content"></div>
+                </div>
+
+                <div class="button-container">
+                    <s-button onclick="calculateHypergeometricProbability()">Calculate</s-button>
+                    <s-button color="default" onclick="clearForm('hypergeometric-N', 'hypergeometric-M', 'hypergeometric-n', 'hypergeometric-x1', 'hypergeometric-x2', 'hypergeometric-result')">Clear</s-button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Log-normal Distribution -->
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <div class="accordion-header-icon">LN</div>
+                <div>
+                    <div class="accordion-header-title">Log-normal Distribution</div>
+                    <div class="accordion-header-description">Calculate probabilities and percentiles for Log-normal distribution</div>
+                </div>
+            </div>
+            <div class="accordion-content hidden">
+                <div>
+                    <s-text-field id="lognormal-mu" label="μ (mean of underlying normal)"></s-text-field>
+                </div>
+                <div>
+                    <s-text-field id="lognormal-sigma" label="σ (std dev of underlying normal)"></s-text-field>
+                </div>
+                <div id="lognormal-x-container">
+                    <s-text-field id="lognormal-x" label="X Value"></s-text-field>
+                </div>
+                <div id="lognormal-p-container" class="hidden">
+                    <s-text-field id="lognormal-p" label="Percentile (0-1)"></s-text-field>
+                </div>                <s-picker id="lognormal-calc-type-picker" label="Calculation Type" onchange="toggleLognormalCalcType()">
+                    <s-picker-item value="pdf">Probability Density</s-picker-item>
+                    <s-picker-item value="cdf">P(X ≤ x)</s-picker-item>
+                    <s-picker-item value="percentile">Percentile</s-picker-item>
+                </s-picker>
+
+                <div id="lognormal-result" class="result hidden">
+                    <div id="lognormal-result-content"></div>
+                </div>
+
+                <div class="button-container">
+                    <s-button onclick="calculateLognormalProbability()">Calculate</s-button>
+                    <s-button color="default" onclick="clearForm('lognormal-mu', 'lognormal-sigma', 'lognormal-x', 'lognormal-p', 'lognormal-result')">Clear</s-button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Negative Binomial Distribution -->
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <div class="accordion-header-icon">NB</div>
+                <div>
+                    <div class="accordion-header-title">Negative Binomial Distribution</div>
+                    <div class="accordion-header-description">Calculate probabilities for Negative Binomial distribution (failures before r-th success)</div>
+                </div>
+            </div>
+            <div class="accordion-content hidden">
+                <div>
+                    <s-text-field id="negbinom-r" label="Number of Successes (r)"></s-text-field>
+                </div>
+                <div>
+                    <s-text-field id="negbinom-p" label="Probability of Success (p)"></s-text-field>
+                </div>
+                <div>
+                    <s-text-field id="negbinom-x1" label="Number of Failures (x)"></s-text-field>
+                </div>
+                <div id="negbinom-x2-container" class="hidden">
+                    <s-text-field id="negbinom-x2" label="X2 Value (for between)"></s-text-field>
+                </div>                <s-picker id="negbinom-calc-type-picker" label="Calculation Type" onchange="toggleNegBinomCalcType()">
+                    <s-picker-item value="exact">P(X = x)</s-picker-item>
+                    <s-picker-item value="less-equal">P(X ≤ x)</s-picker-item>
+                    <s-picker-item value="greater-equal">P(X ≥ x)</s-picker-item>
+                    <s-picker-item value="between">P(x₁ ≤ X ≤ x₂)</s-picker-item>
+                </s-picker>
+
+                <div id="negbinom-result" class="result hidden">
+                    <div id="negbinom-result-content"></div>
+                </div>
+
+                <div class="button-container">
+                    <s-button onclick="calculateNegativeBinomialProbability()">Calculate</s-button>
+                    <s-button color="default" onclick="clearForm('negbinom-r', 'negbinom-p', 'negbinom-x1', 'negbinom-x2', 'negbinom-result')">Clear</s-button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pareto Distribution -->
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <div class="accordion-header-icon">P</div>
+                <div>
+                    <div class="accordion-header-title">Pareto Distribution</div>
+                    <div class="accordion-header-description">Calculate probabilities and percentiles for Pareto distribution</div>
+                </div>
+            </div>
+            <div class="accordion-content hidden">
+                <div>
+                    <s-text-field id="pareto-xm" label="Scale Parameter (xₘ)"></s-text-field>
+                </div>
+                <div>
+                    <s-text-field id="pareto-alpha" label="Shape Parameter (α)"></s-text-field>
+                </div>
+                <div id="pareto-x-container">
+                    <s-text-field id="pareto-x" label="X Value"></s-text-field>
+                </div>
+                <div id="pareto-p-container" class="hidden">
+                    <s-text-field id="pareto-p" label="Percentile (0-1)"></s-text-field>
+                </div>                <s-picker id="pareto-calc-type-picker" label="Calculation Type" onchange="toggleParetoCalcType()">
+                    <s-picker-item value="pdf">Probability Density</s-picker-item>
+                    <s-picker-item value="cdf">P(X ≤ x)</s-picker-item>
+                    <s-picker-item value="percentile">Percentile</s-picker-item>
+                </s-picker>
+
+                <div id="pareto-result" class="result hidden">
+                    <div id="pareto-result-content"></div>
+                </div>
+
+                <div class="button-container">
+                    <s-button onclick="calculateParetoProbability()">Calculate</s-button>
+                    <s-button color="default" onclick="clearForm('pareto-xm', 'pareto-alpha', 'pareto-x', 'pareto-p', 'pareto-result')">Clear</s-button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Weibull Distribution -->
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <div class="accordion-header-icon">W</div>
+                <div>
+                    <div class="accordion-header-title">Weibull Distribution</div>
+                    <div class="accordion-header-description">Calculate probabilities and percentiles for Weibull distribution</div>
+                </div>
+            </div>
+            <div class="accordion-content hidden">
+                <div>
+                    <s-text-field id="weibull-lambda" label="Scale Parameter (λ)"></s-text-field>
+                </div>
+                <div>
+                    <s-text-field id="weibull-k" label="Shape Parameter (k)"></s-text-field>
+                </div>
+                <div id="weibull-x-container">
+                    <s-text-field id="weibull-x" label="X Value"></s-text-field>
+                </div>
+                <div id="weibull-p-container" class="hidden">
+                    <s-text-field id="weibull-p" label="Percentile (0-1)"></s-text-field>
+                </div>                <s-picker id="weibull-calc-type-picker" label="Calculation Type" onchange="toggleWeibullCalcType()">
+                    <s-picker-item value="pdf">Probability Density</s-picker-item>
+                    <s-picker-item value="cdf">P(X ≤ x)</s-picker-item>
+                    <s-picker-item value="percentile">Percentile</s-picker-item>
+                </s-picker>
+
+                <div id="weibull-result" class="result hidden">
+                    <div id="weibull-result-content"></div>
+                </div>
+
+                <div class="button-container">
+                    <s-button onclick="calculateWeibullProbability()">Calculate</s-button>
+                    <s-button color="default" onclick="clearForm('weibull-lambda', 'weibull-k', 'weibull-x', 'weibull-p', 'weibull-result')">Clear</s-button>
+                </div>
+            </div>
+        </div>
 
         <div class="divider"></div>
 
@@ -278,14 +815,161 @@
                 <p id="chi-square-p-value"></p>
             </div>
             <div class="button-container">
-                <s-button onclick="calculatePValueFromChiSquareStats()">Calculate</s-button>
-                <s-button color="default"
+                <s-button onclick="calculatePValueFromChiSquareStats()">Calculate</s-button>                <s-button color="default"
                     onclick="clearForm('chi-square-value', 'chi-square-df', 'chi-square-stats-result')">Clear</s-button>            </div>
         </div>
     </div>
-    </div><!-- 关闭 container -->
-    <!-- Utility scripts -->
+
+    <div class="divider"></div>
+
+    <h2>Non-parametric Tests</h2>
+
+    <!-- Wilcoxon Signed Rank Test -->
+    <div class="accordion-item">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+            <div class="accordion-header-icon">W+</div>
+            <div>
+                <div class="accordion-header-title">Wilcoxon Signed Rank Test</div>
+                <div class="accordion-header-description">Test for median of paired differences (one-sample or paired)</div>
+            </div>
+        </div>
+        <div class="accordion-content hidden">
+            <div>
+                <s-text-field id="wilcoxon-signed-n" label="Sample Size (n)"></s-text-field>
+            </div>
+            <div>
+                <s-text-field id="wilcoxon-signed-w" label="Test Statistic (W)"></s-text-field>
+            </div>
+
+            <s-picker id="wilcoxon-signed-calc-type-picker" label="Calculation Type">
+                <s-picker-item value="exact">P(W = w)</s-picker-item>
+                <s-picker-item value="less-equal">P(W ≤ w)</s-picker-item>
+                <s-picker-item value="greater-equal">P(W ≥ w)</s-picker-item>
+            </s-picker>
+
+            <div id="wilcoxon-signed-result" class="result hidden">
+                <div id="wilcoxon-signed-result-content"></div>
+            </div>
+
+            <div class="button-container">
+                <s-button onclick="calculateWilcoxonSignedRank()">Calculate</s-button>
+                <s-button color="default" onclick="clearForm('wilcoxon-signed-n', 'wilcoxon-signed-w', 'wilcoxon-signed-result')">Clear</s-button>
+            </div>
+        </div>
+    </div>    <!-- Wilcoxon Rank Sum Test (Mann-Whitney U) -->
+    <div class="accordion-item">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+            <div class="accordion-header-icon">W2</div>
+            <div>
+                <div class="accordion-header-title">Wilcoxon Rank Sum Test</div>
+                <div class="accordion-header-description">Mann-Whitney U test for comparing two independent samples</div>
+            </div>
+        </div>
+        <div class="accordion-content hidden">
+            <div>
+                <s-text-field id="wilcoxon-rank-n1" label="Sample Size 1 (n₁)"></s-text-field>
+            </div>
+            <div>
+                <s-text-field id="wilcoxon-rank-n2" label="Sample Size 2 (n₂)"></s-text-field>
+            </div>
+            <div>
+                <s-text-field id="wilcoxon-rank-w" label="Rank Sum (W)"></s-text-field>
+            </div>
+
+            <s-picker id="wilcoxon-rank-calc-type-picker" label="Calculation Type">
+                <s-picker-item value="exact">P(W = w)</s-picker-item>
+                <s-picker-item value="less-equal">P(W ≤ w)</s-picker-item>
+                <s-picker-item value="greater-equal">P(W ≥ w)</s-picker-item>
+            </s-picker>
+
+            <div id="wilcoxon-rank-result" class="result hidden">
+                <div id="wilcoxon-rank-result-content"></div>
+            </div>
+
+            <div class="button-container">
+                <s-button onclick="calculateWilcoxonRankSum()">Calculate</s-button>
+                <s-button color="default" onclick="clearForm('wilcoxon-rank-n1', 'wilcoxon-rank-n2', 'wilcoxon-rank-w', 'wilcoxon-rank-result')">Clear</s-button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mann-Whitney U Test -->
+    <div class="accordion-item">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+            <div class="accordion-header-icon">U</div>
+            <div>
+                <div class="accordion-header-title">Mann-Whitney U Test</div>
+                <div class="accordion-header-description">Direct U statistic for two independent samples comparison</div>
+            </div>
+        </div>
+        <div class="accordion-content hidden">
+            <div>
+                <s-text-field id="mann-whitney-n1" label="Sample Size 1 (n₁)"></s-text-field>
+            </div>
+            <div>
+                <s-text-field id="mann-whitney-n2" label="Sample Size 2 (n₂)"></s-text-field>
+            </div>
+            <div>
+                <s-text-field id="mann-whitney-u" label="U Statistic (U)"></s-text-field>
+            </div>
+
+            <s-picker id="mann-whitney-calc-type-picker" label="Calculation Type">
+                <s-picker-item value="exact">P(U = u)</s-picker-item>
+                <s-picker-item value="less-equal">P(U ≤ u)</s-picker-item>
+                <s-picker-item value="greater-equal">P(U ≥ u)</s-picker-item>
+            </s-picker>
+
+            <div id="mann-whitney-result" class="result hidden">
+                <div id="mann-whitney-result-content"></div>
+            </div>
+
+            <div class="button-container">
+                <s-button onclick="calculateMannWhitneyU()">Calculate</s-button>
+                <s-button color="default" onclick="clearForm('mann-whitney-n1', 'mann-whitney-n2', 'mann-whitney-u', 'mann-whitney-result')">Clear</s-button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Runs Test -->
+    <div class="accordion-item">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+            <div class="accordion-header-icon">R</div>
+            <div>
+                <div class="accordion-header-title">Runs Test</div>
+                <div class="accordion-header-description">Wald-Wolfowitz test for randomness of a sequence</div>
+            </div>
+        </div>
+        <div class="accordion-content hidden">
+            <div>
+                <s-text-field id="runs-n1" label="Type 1 Count (n₁)"></s-text-field>
+            </div>
+            <div>
+                <s-text-field id="runs-n2" label="Type 2 Count (n₂)"></s-text-field>
+            </div>
+            <div>
+                <s-text-field id="runs-r" label="Number of Runs (R)"></s-text-field>
+            </div>
+
+            <s-picker id="runs-calc-type-picker" label="Calculation Type">
+                <s-picker-item value="exact">P(R = r)</s-picker-item>
+                <s-picker-item value="less-equal">P(R ≤ r)</s-picker-item>
+                <s-picker-item value="greater-equal">P(R ≥ r)</s-picker-item>
+            </s-picker>
+
+            <div id="runs-result" class="result hidden">
+                <div id="runs-result-content"></div>
+            </div>
+
+            <div class="button-container">
+                <s-button onclick="calculateRunsTest()">Calculate</s-button>
+                <s-button color="default" onclick="clearForm('runs-n1', 'runs-n2', 'runs-r', 'runs-result')">Clear</s-button>
+            </div>
+        </div>
+    </div>
+
+    </div><!-- 关闭 container --><!-- Utility scripts -->
     <script src="js/util.js"></script>
+    <script src="js/probability-common.js"></script>
 
     <!-- Calculator scripts -->
     <script src="js/z-critical-calculator.js"></script>
@@ -294,7 +978,20 @@
     <script src="js/chi-square-critical-calculator.js"></script>
     <script src="js/z-stats-calculator.js"></script>
     <script src="js/t-stats-calculator.js"></script>
-    <script src="js/f-stats-calculator.js"></script>    <script src="js/chi-square-stats-calculator.js"></script>
+    <script src="js/f-stats-calculator.js"></script>
+    <script src="js/chi-square-stats-calculator.js"></script>      <!-- Probability distribution scripts -->
+    <script src="js/normal-distribution.js"></script>
+    <script src="js/binomial-distribution.js"></script>
+    <script src="js/poisson-distribution.js"></script>
+    <script src="js/exponential-distribution.js"></script>
+    <script src="js/gamma-distribution.js"></script>
+    <script src="js/beta-distribution.js"></script>
+    <script src="js/geometric-distribution.js"></script>
+    <script src="js/hypergeometric-distribution.js"></script>
+    <script src="js/lognormal-distribution.js"></script>
+    <script src="js/negative-binomial-distribution.js"></script>
+    <script src="js/pareto-distribution.js"></script>    <script src="js/weibull-distribution.js"></script>
+    <script src="js/nonparametric-tests.js"></script>
     <!-- Accordion functionality is provided by util.js -->
 </s-page>
 </body>

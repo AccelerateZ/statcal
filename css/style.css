@@ -1,5 +1,31 @@
 /* Statistical Calculator - Sober.js Framework Styles */
 
+/* Ensure text is selectable throughout the application - Override any framework restrictions */
+*, *::before, *::after {
+    -webkit-user-select: text !important;
+    -moz-user-select: text !important;
+    -ms-user-select: text !important;
+    user-select: text !important;
+    -webkit-touch-callout: text !important;
+}
+
+/* Allow specific interactive elements to remain non-selectable if needed for UX */
+button, s-button, input[type="button"], input[type="submit"], input[type="reset"], 
+input[type="radio"], input[type="checkbox"], select {
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+}
+
+/* Force text selection for input fields while typing */
+input[type="text"], input[type="number"], textarea, s-text-field {
+    -webkit-user-select: text !important;
+    -moz-user-select: text !important;
+    -ms-user-select: text !important;
+    user-select: text !important;
+}
+
 html, body {
     height: 100%;
     overflow: hidden;
@@ -157,4 +183,80 @@ h2 {
     .button-container s-button {
         min-height: 2.5rem;
     }
+}
+
+/* S-Picker styling for calculation type selection */
+s-picker {
+    margin: 1rem 0;
+    width: 100%;
+}
+
+s-picker[label] {
+    --s-picker-label-color: var(--s-color-on-surface-variant);
+    --s-picker-label-font-size: 0.875rem;
+}
+
+/* Ensure picker items are properly styled */
+s-picker-item {
+    font-size: 0.875rem;
+    padding: 0.5rem 0.75rem;
+}
+
+/* Horizontal rule styling */
+hr {
+    border: none;
+    height: 1px;
+    background-color: var(--s-color-outline-variant);
+    margin: 1.5rem 0;
+}
+
+/* Enhanced result containers */
+.result h4 {
+    color: var(--s-color-primary);
+    margin-bottom: 0.75rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    /* Ensure result headings are selectable */
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+}
+
+.result p {
+    margin: 0.5rem 0;
+    line-height: 1.6;
+    /* Ensure result text is selectable */
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+}
+
+/* MathJax content styling */
+.MathJax, .MathJax_Display, .MathJax_Preview {
+    font-size: 1.1em !important;
+    /* Ensure MathJax formulas are selectable */
+    -webkit-user-select: text !important;
+    -moz-user-select: text !important;
+    -ms-user-select: text !important;
+    user-select: text !important;
+    -webkit-touch-callout: text !important;
+}
+
+/* Ensure all content areas allow text selection with high priority */
+.container, .accordion-content, .result, .result * {
+    -webkit-user-select: text !important;
+    -moz-user-select: text !important;
+    -ms-user-select: text !important;
+    user-select: text !important;
+}
+
+/* Make sure all text content is selectable with maximum priority */
+h1, h2, h3, h4, h5, h6, p, span, div, .result h4, .result p {
+    -webkit-user-select: text !important;
+    -moz-user-select: text !important;
+    -ms-user-select: text !important;
+    user-select: text !important;
+    -webkit-touch-callout: text !important;
 }
